@@ -1,4 +1,4 @@
-from common_func import *
+from Demo2.common_func import *
 
 class SocketSender(threading.Thread):
     '''send socket message.'''
