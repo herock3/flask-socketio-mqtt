@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Flask-SocketIO Test</title>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            // Use a "/test" namespace.
+            // An application can open a connection on multiple namespaces, and
+            // Socket.IO will multiplex all those connections on a single
+            // physical channel. If you don't care about multiple channels, you
+            // can set the namespace to an empty string.
+            namespace = '/socket';
+
+            // Connect to the Socket.IO server.
+            // The connection URL has the following format:
+            //     http[s]://<domain>:<port>[/<namespace>]
+            var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
+            // Event handler for new connections.
+            // The callback function is invoked when a connection with the
+            // server is established.
+            //socket.on('connect', function() {
+            //    socket.emit('on_connect', ds_data);
+            //});
+            //console.log('.............build connectiion')
+            //socket.emit('on_connect');
+            //console.log('............. send predict')
+            //socket.emit('on_message_predict');
+            
+            // Event handler for server sent data.
+            // The callback function is invoked whenever the server emits data
+            // to the client. The data is then displayed in the "Received"
+            // section of the page.
+            socket.on('message_response_predict', function(msg) {
+                console.log(msg)
+                $('#predict_div').append(msg)
+            });
+    
+            socket.on('message_response_sensor', function(msg) {
+                console.log(msg)
+                $('#sensor_div').append(msg)
+            });
+
+            //socket.on('disconnect', function() {
+            //    socket.emit('on_disconnect', ds_data);
+            //});
+            // Interval function that tests message latency by sending a "ping"
+            // message. The server then responds with a "pong" message and the
+            // round trip time is measured.
+
+            // Handlers for the different forms in the page.
+            // These accept data from the user and send it to the server in a
+            // variety of ways
+            //connect
+            $('form#connect').submit(function(event) {
+                console.log('connect.....,')
+                socket.emit('on_connect');
+                
+                return false;
+            });
+
+            $('form#send_predict').submit(function(event) {
+                console.log('send predict')
+                socket.emit('on_message_predict');
+                return false;
+            });
+
+            $('form#send_sensor').submit(function(event) {
+                console.log('send sensor data...');
+                socket.emit('on_message_sensor');
+                return false;
+            });
+
+
+            //disconnect
+            $('form#disconnect').submit(function(event) {
+                console.log('send disconnect data,')
+                socket.emit('on_disconnect');
+                return false;
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <h1>Flask-SocketIO Test</h1>
+    <h2>Connect:</h2>
+    <form id="connect" method="POST" action='#'>
+        <input type="submit" value="Connect">
+    </form>
+
+    <h2>Send predict:</h2>
+    <form id="send_predict" method="POST" action='#'>
+        <input type="submit" value="send predict">
+    </form>
+    <h2>Send sensor:</h2>
+    <form id="send_sensor" method="POST" action='#'>
+        <input type="submit" value="send sensor">
+    </form>
+
+    <h2>diConnect:</h2>
+    <form id="disconnect" method="POST" action='#'>
+        <input type="submit" value="disConnect">
+    </form>
+    <h2>Receive predict data:</h2>
+    <div id="predict_div"></div>
+    <h2>Receive sensor data:</h2>
+    <div id="sensor_div"></div>
+    
+</body>
+</html>
+

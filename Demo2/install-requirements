@@ -1,0 +1,14 @@
+pip install Flask
+pip install gevent
+pip install -U flask-cors
+#for health
+sudo apt-get install libjpeg-dev
+pip install Pillow
+sudo apt-get install python-scipy
+apt-get install python-h5py
+
+#for ming'en
+pip install paho-mqtt
+pip install pip --upgrade && pip install opencv-python
+sudo apt-get install python-skimage
+pip install balu
